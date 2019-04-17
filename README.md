@@ -2,7 +2,14 @@
 
 # Singleton-OC
 
-<!-- TOC -->autoauto- [Singleton-OC](#singleton-oc)auto        - [V1.0](#v10)auto        - [V2.0](#v20)auto        - [V3.0](#v30)auto        - [V4.0](#v40)auto        - [V5.0](#v50)auto        - [使用](#使用)autoauto<!-- /TOC -->
+<!-- TOC -->     
+- [V1.0](#v10)        
+- [V2.0](#v20)        
+- [V3.0](#v30)       
+- [V4.0](#v40)        
+- [V5.0](#v50)
+- [使用](#使用)
+ <!-- /TOC -->
 
 
 [文章链接](https://juejin.im/post/5cb067676fb9a0688360f987?utm_source=gold_browser_extension)
