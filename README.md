@@ -94,3 +94,25 @@ static SingletonClass *instance_SingletonClass = nil;
     return strongRef;
 }
 ```
+### 使用
+```language
+// .h
+@interface MyClass : NSObject
+AL_AS_SINGLETON; // <- 头文件中加入这个宏
+
+/// your code here ...
+@end
+
+// .m
+@implementation MyClass
+AL_SYNTHESIZE_SINGLETON(MyClass); // <- .m文件中加入这个宏
+
+/// 需要注意的是， 初始化不能直接用 init 方法， 需要用 singletonInit
+/// - (void)singletonInit {
+///    /// 初始化代码写这里, 比如
+///     _myIvar = xxx;
+/// }
+
+/// your code here ...
+@end
+```
