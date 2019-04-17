@@ -18,10 +18,10 @@
 @end
 
 ```
-
+弊端：没有保证无论用何种初始化方法， 都应该只有一个实例
 
 ### V2.0
-```language
+```objc
 static SingletonClass *sharedInstance = nil;
 
 @implementation SingletonClass
@@ -59,18 +59,65 @@ static SingletonClass *sharedInstance = nil;
 @end
 
 ```
+弊端：无法实现单例继承
 
 ### V3.0
-```language
+```objc
+/// 父类
++ (id)allocWithZone:(NSZone *)zone {
+    if (self == SingletonClass.class) {
+        return [self sharedInstance];
+    }
+    return [super allocWithZone:zone];
+}
+
+/// 子类
++ (id)allocWithZone:(NSZone *)zone {
+    if (self == SingletonClassSon.class) {
+        return [self sharedInstance];
+    }
+    return [super allocWithZone:zone];
+}
 
 ```
+弊端：无法保证初始化方法不可重入。
 
 ### V4.0
-```language
+```objc
+// 父类， 子类也类似
+static SingletonClass *instance_SingletonClass = nil;
+- (instancetype)init {
+    static dispatch_semaphore_t semaphore;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        semaphore = dispatch_semaphore_create(1);
+    });
+    
+    SingletonClass *strongRef = instance_SingletonClass;
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    if (strongRef.class != self.class) {
+        self = [super init];
+        if (self.class == SingletonClass.class) {
+            SEL sel = NSSelectorFromString(@"singletonInit");
+            if ([self respondsToSelector:sel]) {
+                [self performSelector:sel];
+            }
+            instance_SingletonClass = self;
+        }
+    }
+    dispatch_semaphore_signal(semaphore);
+    return self;
+}
+
+- (void)singletonInit {
+    NSLog(@"caller: %@; SingletonClass customic init", self);
+}
 
 ```
+弊端：不支持 weak 单例
+
 ### V5.0
-```language
+```objc
 
 static SingletonClass *instance_SingletonClass = nil;
 
@@ -95,7 +142,7 @@ static SingletonClass *instance_SingletonClass = nil;
 }
 ```
 ### 使用
-```language
+```objc
 // .h
 @interface MyClass : NSObject
 AL_AS_SINGLETON; // <- 头文件中加入这个宏
