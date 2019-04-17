@@ -1,5 +1,8 @@
+
+
 # Singleton-OC
 
+[TOC]
 
 [文章链接](https://juejin.im/post/5cb067676fb9a0688360f987?utm_source=gold_browser_extension)
 
